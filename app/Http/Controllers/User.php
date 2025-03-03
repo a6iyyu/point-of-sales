@@ -10,6 +10,6 @@ class User extends Controller
 {
     public function index(): View
     {
-        return view('pengguna', ['data' => UserModel::findOr(20, ['username', 'nama'], fn() => abort(404))]);
+        return view('pengguna', ['data' => UserModel::where('username', 'manager9')->firstOrFail()]);
     }
 }
