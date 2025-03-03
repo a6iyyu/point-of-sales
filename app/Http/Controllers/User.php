@@ -10,6 +10,6 @@ class User extends Controller
 {
     public function index(): View
     {
-        return view('pengguna', ['data' => UserModel::where('username', 'manager9')->firstOrFail()]);
+        return view('pengguna', ['data' => UserModel::where('level_id', 2)->count()]);
     }
 }
