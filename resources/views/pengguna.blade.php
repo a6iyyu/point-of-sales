@@ -17,6 +17,8 @@
             <th>Username</th>
             <th>Nama</th>
             <th>ID Level Pengguna</th>
+            <th>Kode Level</th>
+            <th>Nama Level</th>
             <th>Aksi</th>
         </tr>
         @foreach ($data as $list)
@@ -25,6 +27,8 @@
                 <td>{{ $list->username }}</td>
                 <td>{{ $list->nama }}</td>
                 <td>{{ $list->level_id }}</td>
+                <td>{{ $list->level->level_kode }}</td>
+                <td>{{ $list->level->level_nama }}</td>
                 <td>
                     <a href="/pengguna/edit/{{ $list->user_id }}">Edit</a>
                     |

@@ -13,7 +13,7 @@ class User extends Controller
 {
     public function index(): View
     {
-        return view('pengguna', ['data' => UserModel::all()]);
+        return view('pengguna', ['data' => UserModel::with('level')->get()]);
     }
 
     public function add(): View
