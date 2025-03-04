@@ -11,4 +11,12 @@ Route::get('/', function () {
 
 Route::get('/level', [Level::class, 'index']);
 Route::get('/kategori', [Kategori::class, 'index']);
-Route::get('/pengguna', [User::class, 'index']);
+
+Route::prefix('pengguna')->group(function () {
+    Route::get('/', [User::class, 'index']);
+    Route::get('/tambah', [User::class, 'add']);
+    Route::get('/edit/{id}', [User::class, 'edit']);
+    Route::get('/hapus/{id}', [User::class, 'delete'])->name('hapus-pengguna');
+    Route::post('/simpan', [User::class, 'save'])->name('simpan-pengguna');
+    Route::put('/edit/{id}', [User::class, 'put'])->name('edit-pengguna');
+});

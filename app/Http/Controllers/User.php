@@ -4,25 +4,54 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User as UserModel;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 
 class User extends Controller
 {
-    public function index()
+    public function index(): View
     {
-        $user = UserModel::create([
-            'username' => 'manager11',
-            'nama' => 'Manager11',
-            'password' => Hash::make('12345'),
-            'level_id' => 2,
+        return view('pengguna', ['data' => UserModel::all()]);
+    }
+
+    public function add(): View
+    {
+        return view('tambah-pengguna');
+    }
+
+    public function save(Request $request): RedirectResponse
+    {
+        UserModel::create([
+            'username' => $request->username,
+            'nama' => $request->nama,
+            'password' => Hash::make($request->password),
+            'level_id' => $request->level_id,
         ]);
 
-        $user->username = 'manager12';
+        return redirect('/pengguna');
+    }
+
+    public function edit($id): View
+    {
+        return view('edit-pengguna', ['data' => UserModel::find($id)]);
+    }
+
+    public function put(Request $request, $id): RedirectResponse
+    {
+        $user = UserModel::find($id);
+        $user->username = $request->username;
+        $user->nama = $request->nama;
+        $user->password = Hash::make($request->password);
+        $user->level_id = $request->level_id;
         $user->save();
-        $user->wasChanged();
-        $user->wasChanged('username');
-        $user->wasChanged(['username', 'level_id']);
-        $user->wasChanged('nama');
-        dd($user->wasChanged(['nama', 'username']));
+        return redirect('/pengguna');
+    }
+
+    public function delete($id): RedirectResponse
+    {
+        UserModel::find($id)->delete();
+        return redirect('/pengguna');
     }
 }
