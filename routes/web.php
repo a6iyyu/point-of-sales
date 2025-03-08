@@ -3,11 +3,10 @@
 use App\Http\Controllers\Kategori;
 use App\Http\Controllers\Level;
 use App\Http\Controllers\User;
+use App\Http\Controllers\Welcome;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [Welcome::class, 'index']);
 
 Route::get('/level', [Level::class, 'index']);
 Route::get('/kategori', [Kategori::class, 'index']);

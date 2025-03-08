@@ -1,15 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.template')
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-</head>
-
-<body>
-
-</body>
-
-</html>
+@section('content')
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Halo, apa kabar?</h3>
+            <div class="card-tools"></div>
+        </div>
+        <div class="card-body">
+            Selamat datang semua, ini adalah halaman utama dari aplikasi ini.
+        </div>
+    </div>
+@endsection
