@@ -22,12 +22,13 @@ class User extends Controller
             'list' => ['Home', 'User']
         ];
 
-        return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'active_menu' => 'user']);
+        return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'level' => Level::all(), 'active_menu' => 'user']);
     }
 
-    public function list(): JsonResponse
+    public function list(Request $request): JsonResponse
     {
         $users = UserModel::select('user_id', 'username', 'nama', 'level_id')->with('level');
+        if ($request->level_id) $users->where('level_id', $request->level_id);
         return DataTables::of($users)
             ->addIndexColumn()
             ->addColumn('aksi', function ($user) {
