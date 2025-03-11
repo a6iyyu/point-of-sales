@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->unsignedInteger('harga_beli');
             $table->unsignedInteger('harga_jual');
             $table->timestamps();
-            $table->foreign('kategori_id')->references('kategori_id')->on('m_kategori')->onDelete('cascade');
+            $table->foreign('kategori_id')->references('kategori_id')->on('m_kategori');
         });
     }
 
