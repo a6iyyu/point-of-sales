@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Barang;
 use App\Http\Controllers\Kategori;
 use App\Http\Controllers\Level;
 use App\Http\Controllers\Supplier;
@@ -51,4 +52,15 @@ Route::group(['prefix' => 'supplier'], function () {
     Route::get('/{id}/edit', [Supplier::class, 'edit']);  // menampilkan halaman form edit supplier 
     Route::put('/{id}', [Supplier::class, 'update']);     // menyimpan perubahan data supplier 
     Route::delete('/{id}', [Supplier::class, 'destroy']); // menghapus data supplier
+});
+
+Route::group(['prefix' => 'barang'], function () {
+    Route::get('/', [Barang::class, 'index']);          // menampilkan halaman awal barang 
+    Route::post('/list', [Barang::class, 'list']);      // menampilkan data barang dalam bentuk json untuk datatables 
+    Route::get('/create', [Barang::class, 'create']);   // menampilkan halaman form tambah barang 
+    Route::post('/', [Barang::class, 'store']);         // menyimpan data barang baru 
+    Route::get('/{id}', [Barang::class, 'show']);       // menampilkan detail barang 
+    Route::get('/{id}/edit', [Barang::class, 'edit']);  // menampilkan halaman form edit barang 
+    Route::put('/{id}', [Barang::class, 'update']);     // menyimpan perubahan data barang 
+    Route::delete('/{id}', [Barang::class, 'destroy']); // menghapus data barang
 });
