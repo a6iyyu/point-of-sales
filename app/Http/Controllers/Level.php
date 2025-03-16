@@ -175,7 +175,6 @@ class Level extends Controller
                 return Response::json(['status' => false, 'message' => 'Data tidak ditemukan.']);
             }
         }
-
         return redirect('/level');
     }
 

@@ -65,9 +65,8 @@
 @push('js')
     <script>
         const modal_action = (url = '') => $('#my-modal').load(url, () => $('#my-modal').modal('show'));
-
         $(document).ready(() => {
-            let dataUser = $('#table-user').DataTable({
+            let data_user = $('#table-user').DataTable({
                 serverSide: true,
                 ajax: {
                     "url": "{{ url('/user/list') }}",
@@ -110,7 +109,7 @@
                 ]
             });
 
-            $('#level_id').on('change', () => dataUser.ajax.reload());
+            $('#level_id').on('change', () => data_user.ajax.reload());
         });
     </script>
 @endpush

@@ -1,38 +1,23 @@
-<form action="{{ url('/user/ajax') }}" method="POST" id="form-tambah">
+<form action="{{ url('/kategori/ajax') }}" method="POST" id="form-tambah">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="example-modal-label">Tambah Data Pengguna</h5>
+                <h5 class="modal-title" id="example-modal-label">Tambah Data Kategori</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Level Pengguna</label>
-                    <select name="level_id" id="level_id" class="form-control" required>
-                        <option value="">- Pilih Level -</option>
-                        @foreach ($level as $l)
-                            <option value="{{ $l->level_id }}">{{ $l->level_nama }}</option>
-                        @endforeach
-                    </select>
-                    <small id="error-level_id" class="error-text form-text text-danger"></small>
-                </div>
-                <div class="form-group">
-                    <label>Username</label>
-                    <input value="" type="text" name="username" id="username" class="form-control" required>
-                    <small id="error-username" class="error-text form-text text-danger"></small>
+                    <label>Kode</label>
+                    <input value="" type="text" name="kategori_kode" id="kategori_kode" class="form-control" required>
+                    <small id="error-kategori_kode" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Nama</label>
-                    <input value="" type="text" name="nama" id="nama" class="form-control" required>
-                    <small id="error-nama" class="error-text form-text text-danger"></small>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input value="" type="password" name="password" id="password" class="form-control" required>
-                    <small id="error-password" class="error-text form-text text-danger"></small>
+                    <input value="" type="text" name="kategori_nama" id="kategori_nama" class="form-control" required>
+                    <small id="error-kategori_nama" class="error-text form-text text-danger"></small>
                 </div>
             </div>
             <div class="modal-footer">
@@ -47,25 +32,17 @@
     $(document).ready(() => {
         $("#form-tambah").validate({
             rules: {
-                level_id: {
+                kategori_kode: {
                     required: true,
-                    number: true
+                    maxlength: 6,
+                    pattern: /^[A-Z0-9]+$/
                 },
-                username: {
+                kategori_nama: {
                     required: true,
                     minlength: 3,
-                    maxlength: 20
+                    maxlength: 50,
+                    pattern: /^[a-zA-Z\s]+$/
                 },
-                nama: {
-                    required: true,
-                    minlength: 3,
-                    maxlength: 100
-                },
-                password: {
-                    required: true,
-                    minlength: 6,
-                    maxlength: 20
-                }
             },
             submitHandler: (form) => {
                 $.ajax({

@@ -1,4 +1,4 @@
-@empty($level)
+@empty($kategori)
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -12,49 +12,71 @@
                     <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
                     Data yang anda cari tidak ditemukan
                 </div>
-                <a href="{{ url('/level') }}" class="btn btn-warning">Kembali</a>
+                <a href="{{ url('/kategori') }}" class="btn btn-warning">Kembali</a>
             </div>
         </div>
     </div>
 @else
-    <form action="{{ url('/level/' . $level->level_id . '/delete-ajax') }}" method="POST" id="form-delete">
+    <form action="{{ url('/kategori/' . $kategori->kategori_id . '/update-ajax') }}" method="POST" id="form-edit">
         @csrf
-        @method('DELETE')
+        @method('PUT')
         <div id="modal-master" class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Hapus Data Level</h5>
+                    <h5 class="modal-title">Edit Data Kategori</h5>
                     <button type="button" class="close" data-dismiss="modal" arialabel="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="alert alert-warning">
-                        <h5><i class="icon fas fa-ban"></i> Konfirmasi!</h5>
-                        Apakah Anda ingin menghapus data seperti di bawah ini?
+                    <div class="form-group">
+                        <label>Kode</label>
+                        <input
+                            value="{{ $kategori->kategori_kode }}"
+                            type="text"
+                            name="kategori_kode"
+                            id="kategori_kode"
+                            class="form-control"
+                            required
+                        />
+                        <small id="error-kategori_kode" class="error-text form-text text-danger"></small>
                     </div>
-                    <table class="table table-sm table-bordered table-striped">
-                        <tr>
-                            <th class="text-right col-3">Kode :</th>
-                            <td class="col-9">{{ $level->level_kode }}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right col-3">Nama :</th>
-                            <td class="col-9">{{ $level->level_nama }}</td>
-                        </tr>
-                    </table>
+                    <div class="form-group">
+                        <label>Nama</label>
+                        <input
+                            value="{{ $kategori->kategori_nama }}"
+                            type="text"
+                            name="kategori_nama"
+                            id="kategori_nama"
+                            class="form-control"
+                            required
+                        />
+                        <small id="error-kategori_nama" class="error-text form-text text-danger"></small>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
-                    <button type="submit" class="btn btn-primary">Ya, Hapus</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </div>
         </div>
     </form>
     <script>
         $(document).ready(() => {
-            $("#form-delete").validate({
-                rules: {},
+            $("#form-edit").validate({
+                rules: {
+                    kategori_kode: {
+                        required: true,
+                        maxlength: 6,
+                        pattern: /^[A-Z0-9]+$/
+                    },
+                    kategori_nama: {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 50,
+                        pattern: /^[a-zA-Z\s]+$/
+                    },
+                },
                 submitHandler: (form) => {
                     $.ajax({
                         url: form.action,

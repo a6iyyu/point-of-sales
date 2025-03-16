@@ -5,7 +5,10 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
-                <a class="btn btn-sm btn-primary mt-1" href="{{ url('kategori/create') }}">Tambah</a>
+                <a class="btn btn-sm btn-primary mt-1" href="{{ url('/kategori/create') }}">Tambah</a>
+                <button onclick="modal_action('{{ url('/kategori/create-ajax') }}')" class="btn btn-sm btn-success mt-1">
+                    Tambah AJAX
+                </button>
             </div>
         </div>
         <div class="card-body">
@@ -15,22 +18,6 @@
             @if (session('error'))
                 <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group row">
-                        <label for="" class="col-1 control-label col-form-label">Filter:</label>
-                        <div class="col-3">
-                            <select name="kategori_id" id="kategori_id" class="form-control" required>
-                                <option value="">- Semua -</option>
-                                @foreach ($kategori as $item)
-                                    <option value="{{ $item->kategori_id }}">{{ $item->kategori_nama }}</option>
-                                @endforeach
-                            </select>
-                            <small class="form-text text-muted">Kategori Pengguna</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <table class="table table-bordered table-striped table-hover table-sm" id="table_kategori">
                 <thead>
                     <tr>
@@ -43,6 +30,16 @@
             </table>
         </div>
     </div>
+    <div
+        id="my-modal"
+        class="modal fade animate shake"
+        tabindex="-1"
+        role="dialog"
+        databackdrop="static"
+        data-keyboard="false"
+        data-width="75%"
+        aria-hidden="true"
+    ></div>
 @endsection
 
 @push('css')
@@ -50,11 +47,12 @@
 
 @push('js')
     <script>
+        const modal_action = (url = '') => $('#my-modal').load(url, () => $('#my-modal').modal('show'));
         $(document).ready(function() {
-            var dataLevel = $('#table_kategori').DataTable({
+            let data_kategori = $('#table_kategori').DataTable({
                 serverSide: true,
                 ajax: {
-                    "url": "{{ url('kategori/list') }}",
+                    "url": "{{ url('/kategori/list') }}",
                     "dataType": "json",
                     "type": "POST",
                     "data": d => {
@@ -88,7 +86,7 @@
                 ]
             });
 
-            $('#kategori_id').on('change', () => dataLevel.ajax.reload());
+            $('#kategori_id').on('change', () => data_kategori.ajax.reload());
         });
     </script>
 @endpush

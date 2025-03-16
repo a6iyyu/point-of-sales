@@ -5,7 +5,7 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
-                <a class="btn btn-sm btn-primary mt-1" href="{{ url('level/create') }}">Tambah</a>
+                <a class="btn btn-sm btn-primary mt-1" href="{{ url('/level/create') }}">Tambah</a>
                 <button onclick="modal_action('{{ url('/level/create-ajax') }}')" class="btn btn-sm btn-success mt-1">
                     Tambah AJAX
                 </button>
@@ -48,9 +48,8 @@
 @push('js')
     <script>
         const modal_action = (url = '') => $('#my-modal').load(url, () => $('#my-modal').modal('show'));
-        
         $(document).ready(() => {
-            let dataLevel = $('#table_level').DataTable({
+            let data_level = $('#table_level').DataTable({
                 serverSide: true,
                 ajax: {
                     "url": "{{ url('level/list') }}",
@@ -87,7 +86,7 @@
                 ]
             });
 
-            $('#level_id').on('change', () => dataLevel.ajax.reload());
+            $('#level_id').on('change', () => data_level.ajax.reload());
         });
     </script>
 @endpush
