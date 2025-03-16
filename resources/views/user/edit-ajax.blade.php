@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body">
                 <div class="alert alert-danger">
-                    <h5><i class="icon fas fa-ban"></i> Kesalahan!!!</h5>
+                    <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
                     Data yang anda cari tidak ditemukan
                 </div>
                 <a href="{{ url('/user') }}" class="btn btn-warning">Kembali</a>
@@ -117,7 +117,7 @@
                         data: $(form).serialize(),
                         success: (response) => {
                             if (response.status) {
-                                $('#myModal').modal('hide');
+                                $('#my-modal').modal('hide');
                                 Swal.fire({ icon: 'success', title: 'Berhasil', text: response.message });
                                 dataUser.ajax.reload();
                             } else {
@@ -130,7 +130,7 @@
                     return false;
                 },
                 errorElement: 'span',
-                errorPlacement: function(error, element) {
+                errorPlacement: (error, element) => {
                     error.addClass('invalid-feedback');
                     element.closest('.form-group').append(error);
                 },

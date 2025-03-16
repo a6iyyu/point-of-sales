@@ -64,11 +64,10 @@
 
 @push('js')
     <script>
-        let dataUser;
         const modal_action = (url = '') => $('#my-modal').load(url, () => $('#my-modal').modal('show'));
 
-        $(document).ready(function() {
-            dataUser = $('#table-user').DataTable({
+        $(document).ready(() => {
+            let dataUser = $('#table-user').DataTable({
                 serverSide: true,
                 ajax: {
                     "url": "{{ url('/user/list') }}",

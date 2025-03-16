@@ -37,7 +37,7 @@ class User extends Controller
             ->addColumn('aksi', function ($user) {
                 $btn = '<button onclick="modal_action(\''.url('/user/' . $user->user_id . '/show-ajax').'\')" class="btn btn-info btn-sm">Detail</button> ';
                 $btn .= '<button onclick="modal_action(\''.url('/user/' . $user->user_id . '/edit-ajax').'\')" class="btn btn-warning btn-sm">Edit</button> ';
-                $btn .=  '<button onclick="modal_action(\''.url('/user/' . $user->user_id . '/delete-ajax').'\')" class="btn btn-danger btn-sm">Hapus</button> ';                
+                $btn .=  '<button onclick="modal_action(\''.url('/user/' . $user->user_id . '/delete-ajax').'\')" class="btn btn-danger btn-sm">Hapus</button> ';
                 return $btn;
             })
             ->rawColumns(['aksi'])

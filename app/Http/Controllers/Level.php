@@ -7,12 +7,15 @@ use App\Models\Level as LevelModel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
 
 class Level extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $page = (object) ['title' => 'Daftar level yang terdaftar dalam sistem.'];
         $breadcrumb = (object) [
@@ -30,9 +33,9 @@ class Level extends Controller
         return DataTables::of($level)
             ->addIndexColumn()
             ->addColumn('aksi', function ($level) {
-                $btn = '<a href="' . url('/level/' . $level->level_id) . '" class="btn btn-info btnsm">Detail</a> ';
-                $btn .= '<a href="' . url('/level/' . $level->level_id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a> ';
-                $btn .= '<form method="POST" action="' . url('/level/' . $level->level_id) . '" style="display:inline;">' . csrf_field() . method_field('DELETE') . '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>';
+                $btn = '<button onclick="modal_action(\''.url('/level/' . $level->level_id . '/show-ajax').'\')" class="btn btn-info btn-sm">Detail</button> ';
+                $btn .= '<button onclick="modal_action(\''.url('/level/' . $level->level_id . '/edit-ajax').'\')" class="btn btn-warning btn-sm">Edit</button> ';
+                $btn .=  '<button onclick="modal_action(\''.url('/level/' . $level->level_id . '/delete-ajax').'\')" class="btn btn-danger btn-sm">Hapus</button> ';
                 return $btn;
             })
             ->rawColumns(['aksi'])
@@ -50,11 +53,11 @@ class Level extends Controller
         return view('level.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'active_menu' => 'level']);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'level_kode' => 'required|max:3',
-            'level_nama' => 'required|string',
+            'level_kode' => "required|max:3|unique:level_kode,level_id",
+            'level_nama' => "required|string|unique:level_nama,level_id",
         ]);
 
         LevelModel::create([
@@ -96,8 +99,8 @@ class Level extends Controller
     public function update(Request $request, string $id): RedirectResponse
     {
         $request->validate([
-            'level_kode' => 'required|max:3',
-            'level_nama' => 'required|string',
+            'level_kode' => "required|max:3|unique:level_kode,$id,level_id",
+            'level_nama' => "required|string|unique:level_nama,$id,level_id",
         ]);
 
         LevelModel::find($id)->update([
@@ -113,5 +116,85 @@ class Level extends Controller
         if (!LevelModel::find($id)) return redirect('/level')->with('error', 'Data level tidak ditemukan.');
         LevelModel::find($id)->delete();
         return redirect('/level')->with('success', 'Data level berhasil dihapus.');        
+    }
+
+    public function create_ajax(): View
+    {
+        return view('level.create-ajax', ['level' => LevelModel::all()]);
+    }
+
+    public function store_ajax(Request $request): JsonResponse|Redirector|RedirectResponse
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $validator = Validator::make($request->all(), [
+                'level_kode' => 'required|string|max:3|regex:/^[A-Z]+$/',
+                'level_nama' => 'required|string|min:3|max:50|regex:/^[a-zA-Z\s]+$/',
+            ]);
+    
+            if ($validator->fails()) {
+                return Response::json([
+                    'status'   => false,
+                    'message'  => 'Validasi Gagal.',
+                    'message_field' => $validator->errors(),
+                ]);
+            }
+
+            LevelModel::create([
+                'level_kode' => $request->level_kode,
+                'level_nama' => $request->level_nama,
+            ]);
+
+            return Response::json(['status'  => true, 'message' => 'Data level berhasil disimpan']);
+        }
+        return redirect('/level');
+    }
+
+    public function edit_ajax(string $id): View
+    {
+        return view('level.edit-ajax', ['level' => LevelModel::find($id)]);
+    }
+
+    public function update_ajax(Request $request, string $id): JsonResponse|Redirector|RedirectResponse
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $validator = Validator::make($request->all(), [
+                'level_kode' => 'required|string|max:3|regex:/^[A-Z]+$/|unique:m_level,level_kode,' . $id . ',level_id',
+                'level_nama' => 'required|string|min:3|max:50|regex:/^[a-zA-Z\s]+$/',
+            ]);
+
+            if ($validator->fails()) return Response::json(['status' => false, 'message' => 'Validasi Gagal.', 'message_field' => $validator->errors()]);
+
+            if (LevelModel::find($id)) {
+                LevelModel::find($id)->update([
+                    'level_kode' => $request->level_kode,
+                    'level_nama' => $request->level_nama,
+                ]);
+
+                return Response::json(['status' => true, 'message' => 'Data berhasil diperbarui.']);
+            } else {
+                return Response::json(['status' => false, 'message' => 'Data tidak ditemukan.']);
+            }
+        }
+
+        return redirect('/level');
+    }
+
+    public function confirm_ajax(string $id): View
+    {
+        return view('level.confirm-ajax', ['level' => LevelModel::find($id)]);
+    }
+
+    public function delete_ajax(Request $request, string $id): JsonResponse|Redirector|RedirectResponse
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            if (LevelModel::find($id)) {
+                LevelModel::find($id)->delete();
+                return Response::json(['status' => true, 'message' => 'Data berhasil dihapus.']);
+            } else {
+                return Response::json(['status' => false, 'message' => 'Data tidak ditemukan.']);
+            }
+        }
+
+        return redirect('/level');
     }
 }
