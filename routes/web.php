@@ -11,16 +11,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [Welcome::class, 'index']);
 
 Route::group(['prefix' => 'user'], function () {
-    Route::get('/', [User::class, 'index']);          // menampilkan halaman awal user 
-    Route::post('/list', [User::class, 'list']);      // menampilkan data user dalam bentuk json untuk datatables 
-    Route::get('/create', [User::class, 'create']);   // menampilkan halaman form tambah user 
-    Route::post('/', [User::class, 'store']);         // menyimpan data user baru
-    Route::get('/create-ajax', [User::class, 'create_ajax']); // Menampilkan halaman form tambah user AJAX
-    Route::post('/ajax', [User::class, 'store_ajax']); // Menampilkan halaman form tambah user AJAX
-    Route::get('/{id}', [User::class, 'show']);       // menampilkan detail user
-    Route::get('/{id}/edit', [User::class, 'edit']);  // menampilkan halaman form edit user 
-    Route::put('/{id}', [User::class, 'update']);     // menyimpan perubahan data user 
-    Route::delete('/{id}', [User::class, 'destroy']); // menghapus data user
+    Route::get('/', [User::class, 'index']);                            // menampilkan halaman awal user
+    Route::post('/list', [User::class, 'list']);                        // menampilkan data user dalam bentuk json untuk datatables
+    Route::get('/create', [User::class, 'create']);                     // menampilkan halaman form tambah user
+    Route::post('/', [User::class, 'store']);                           // menyimpan data user baru
+    Route::get('/create-ajax', [User::class, 'create_ajax']);           // Menampilkan halaman form tambah user AJAX
+    Route::post('/ajax', [User::class, 'store_ajax']);                  // Menampilkan halaman form tambah user AJAX
+    Route::get('/{id}', [User::class, 'show']);                         // menampilkan detail user
+    Route::get('/{id}/edit', [User::class, 'edit']);                    // menampilkan halaman form edit user
+    Route::put('/{id}', [User::class, 'update']);                       // menyimpan perubahan data user
+    Route::get('/{id}/edit-ajax', [User::class, 'edit_ajax']);          // Menampilkan halaman form edit user AJAX
+    Route::put('/{id}/update-ajax', [User::class, 'update_ajax']);      // Menampilkan halaman form edit user AJAX
+    Route::delete('/{id}', [User::class, 'destroy']);                   // menghapus data user
 });
 
 Route::group(['prefix' => 'level'], function () {

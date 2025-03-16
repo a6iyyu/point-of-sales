@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Level;
+use App\Models\Level as LevelModel;
 use App\Models\User as UserModel;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
@@ -24,7 +25,7 @@ class User extends Controller
             'list' => ['Home', 'User']
         ];
 
-        return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'level' => Level::all(), 'active_menu' => 'user']);
+        return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'level' => LevelModel::all(), 'active_menu' => 'user']);
     }
 
     public function list(Request $request): JsonResponse
@@ -34,9 +35,9 @@ class User extends Controller
         return DataTables::of($users)
             ->addIndexColumn()
             ->addColumn('aksi', function ($user) {
-                $btn = '<a href="' . url('/user/' . $user->user_id) . '" class="btn btn-info btnsm">Detail</a> ';
-                $btn .= '<a href="' . url('/user/' . $user->user_id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a> ';
-                $btn .= '<form class="d-inline-block" method="POST" action="' . url('/user/' . $user->user_id) . '">' . csrf_field() . method_field('DELETE') . '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakit menghapus data ini?\');">Hapus</button></form>';
+                $btn = '<button onclick="modal_action(\''.url('/user/' . $user->user_id . '/show-ajax').'\')" class="btn btn-info btn-sm">Detail</button> ';
+                $btn .= '<button onclick="modal_action(\''.url('/user/' . $user->user_id . '/edit-ajax').'\')" class="btn btn-warning btn-sm">Edit</button> ';
+                $btn .=  '<button onclick="modal_action(\''.url('/user/' . $user->user_id . '/delete-ajax').'\')" class="btn btn-danger btn-sm">Hapus</button> ';                
                 return $btn;
             })
             ->rawColumns(['aksi'])
@@ -51,10 +52,10 @@ class User extends Controller
             'list' => ['Home', 'User', 'Add']
         ];
 
-        return view('user.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'level' => Level::all(), 'active_menu' => 'user']);
+        return view('user.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'level' => LevelModel::all(), 'active_menu' => 'user']);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'username' => 'required|string|min:3|unique:m_user,username',
@@ -97,7 +98,7 @@ class User extends Controller
             'breadcrumb' => $breadcrumb,
             'page' => $page,
             'user' => UserModel::find($id),
-            'level' => Level::all(),
+            'level' => LevelModel::all(),
             'active_menu' => 'user',
         ]);
     }
@@ -134,10 +135,10 @@ class User extends Controller
 
     public function create_ajax(): View
     {
-        return view('user.create-ajax')->with('level', Level::select('level_id', 'level_nama')->get());
+        return view('user.create-ajax')->with('level', LevelModel::select('level_id', 'level_nama')->get());
     }
 
-    public function store_ajax(Request $request)
+    public function store_ajax(Request $request): JsonResponse|Redirector|RedirectResponse
     {
         if ($request->ajax() || $request->wantsJson()) {
             $validator = Validator::make($request->all(), [
@@ -148,9 +149,9 @@ class User extends Controller
             ]);
     
             if ($validator->fails()) {
-                return response()->json([
+                return Response::json([
                     'status'   => false,
-                    'message'  => 'Validasi Gagal',
+                    'message'  => 'Validasi Gagal.',
                     'message_field' => $validator->errors(),
                 ]);
             }
@@ -162,8 +163,46 @@ class User extends Controller
                 'level_id' => $request->level_id,
             ]);
 
-            return response()->json(['status'  => true, 'message' => 'Data user berhasil disimpan']);
+            return Response::json(['status'  => true, 'message' => 'Data user berhasil disimpan']);
         }
+        return redirect('/user');
+    }
+
+    public function edit_ajax(string $id): View
+    {
+        $level = LevelModel::select('level_id', 'level_nama')->get();
+        $user = UserModel::find($id);
+        return view('user.edit-ajax', ['level' => $level, 'user' => $user]);
+    }
+
+    public function update_ajax(Request $request, string $id): JsonResponse|Redirector|RedirectResponse
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $validator = Validator::make($request->all(), [
+                'level_id' => 'required|integer',
+                'username' => 'required|max:20|unique:m_user,username,' . $id . ',user_id',
+                'nama'     => 'required|max:100',
+                'password' => 'nullable|min:6|max:20',
+            ]);
+
+            if ($validator->fails()) return Response::json(['status' => false, 'message' => 'Validasi Gagal.', 'message_field' => $validator->errors()]);
+
+            if (UserModel::find($id)) {
+                if (!$request->filled('password')) $request->request->remove('password');
+
+                UserModel::find($id)->update([
+                    'username' => $request->username,
+                    'nama' => $request->nama,
+                    'password' => $request->password ? bcrypt($request->password) : UserModel::find($id)->password,
+                    'level_id' => $request->level_id,
+                ]);
+
+                return Response::json(['status' => true, 'message' => 'Data berhasil diperbarui.']);
+            } else {
+                return Response::json(['status' => false, 'message' => 'Data tidak ditemukan.']);
+            }
+        }
+
         return redirect('/user');
     }
 }
