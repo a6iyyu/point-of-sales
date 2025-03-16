@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [Welcome::class, 'index']);
 
-Route::group(['prefix' => 'user'], function () {
+Route::prefix('user')->group(function () {
     Route::get('/', [User::class, 'index']);                            // menampilkan halaman awal user
     Route::post('/list', [User::class, 'list']);                        // menampilkan data user dalam bentuk json untuk datatables
     Route::get('/create', [User::class, 'create']);                     // menampilkan halaman form tambah user
@@ -22,10 +22,12 @@ Route::group(['prefix' => 'user'], function () {
     Route::put('/{id}', [User::class, 'update']);                       // menyimpan perubahan data user
     Route::get('/{id}/edit-ajax', [User::class, 'edit_ajax']);          // Menampilkan halaman form edit user AJAX
     Route::put('/{id}/update-ajax', [User::class, 'update_ajax']);      // Menampilkan halaman form edit user AJAX
+    Route::get('/{id}/delete-ajax', [User::class, 'confirm_ajax']);     // Untuk tampilkan form confirm delete user AJAX
+    Route::delete('/{id}/delete-ajax', [User::class, 'delete_ajax']);   // Untuk hapus data use AJAX
     Route::delete('/{id}', [User::class, 'destroy']);                   // menghapus data user
 });
 
-Route::group(['prefix' => 'level'], function () {
+Route::prefix('level')->group(function () {
     Route::get('/', [Level::class, 'index']);          // menampilkan halaman awal level 
     Route::post('/list', [Level::class, 'list']);      // menampilkan data level dalam bentuk json untuk datatables 
     Route::get('/create', [Level::class, 'create']);   // menampilkan halaman form tambah level 
@@ -36,7 +38,7 @@ Route::group(['prefix' => 'level'], function () {
     Route::delete('/{id}', [Level::class, 'destroy']); // menghapus data level
 });
 
-Route::group(['prefix' => 'kategori'], function () {
+Route::prefix('kategori')->group(function () {
     Route::get('/', [Kategori::class, 'index']);          // menampilkan halaman awal kategori 
     Route::post('/list', [Kategori::class, 'list']);      // menampilkan data kategori dalam bentuk json untuk datatables 
     Route::get('/create', [Kategori::class, 'create']);   // menampilkan halaman form tambah kategori 
@@ -47,7 +49,7 @@ Route::group(['prefix' => 'kategori'], function () {
     Route::delete('/{id}', [Kategori::class, 'destroy']); // menghapus data kategori
 });
 
-Route::group(['prefix' => 'supplier'], function () {
+Route::prefix('supplier')->group(function () {
     Route::get('/', [Supplier::class, 'index']);          // menampilkan halaman awal supplier 
     Route::post('/list', [Supplier::class, 'list']);      // menampilkan data supplier dalam bentuk json untuk datatables 
     Route::get('/create', [Supplier::class, 'create']);   // menampilkan halaman form tambah supplier 
@@ -58,7 +60,7 @@ Route::group(['prefix' => 'supplier'], function () {
     Route::delete('/{id}', [Supplier::class, 'destroy']); // menghapus data supplier
 });
 
-Route::group(['prefix' => 'barang'], function () {
+Route::prefix('barang')->group(function () {
     Route::get('/', [Barang::class, 'index']);          // menampilkan halaman awal barang 
     Route::post('/list', [Barang::class, 'list']);      // menampilkan data barang dalam bentuk json untuk datatables 
     Route::get('/create', [Barang::class, 'create']);   // menampilkan halaman form tambah barang 
