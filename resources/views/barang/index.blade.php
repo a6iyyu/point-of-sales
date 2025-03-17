@@ -5,7 +5,10 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
-                <a class="btn btn-sm btn-primary mt-1" href="{{ url('barang/create') }}">Tambah</a>
+                <a class="btn btn-sm btn-primary mt-1" href="{{ url('/barang/create') }}">Tambah</a>
+                <button onclick="modal_action('{{ url('/barang/create-ajax') }}')" class="btn btn-sm btn-success mt-1">
+                    Tambah AJAX
+                </button>
             </div>
         </div>
         <div class="card-body">
@@ -46,6 +49,16 @@
             </table>
         </div>
     </div>
+    <div
+        id="my-modal"
+        class="modal fade animate shake"
+        tabindex="-1"
+        role="dialog"
+        databackdrop="static"
+        data-keyboard="false"
+        data-width="75%"
+        aria-hidden="true"
+    ></div>
 @endsection
 
 @push('css')
@@ -53,6 +66,7 @@
 
 @push('js')
     <script>
+        const modal_action = (url = '') => $('#my-modal').load(url, () => $('#my-modal').modal('show'));
         $(document).ready(function() {
             var databarang = $('#table_barang').DataTable({
                 serverSide: true,
@@ -60,7 +74,7 @@
                     "url": "{{ url('barang/list') }}",
                     "dataType": "json",
                     "type": "POST",
-                    "data": function (d) {
+                    "data": (d) => {
                         d.kategori_id = $('#kategori_id').val();
                     }
                 },
@@ -73,37 +87,37 @@
                 },
                 {
                     data: "barang_kode",
-                    className: "",
+                    className: "text-center",
                     orderable: true,
                     searchable: true
                 },
                 {
                     data: "barang_nama",
-                    className: "",
-                    orderable: true,
+                    className: "text-center",
+                    orderable: false,
                     searchable: true
                 },
                 {
                     data: "harga_beli",
-                    className: "",
+                    className: "text-center",
                     orderable: true,
                     searchable: true
                 },
                 {
                     data: "harga_jual",
-                    className: "",
+                    className: "text-center",
                     orderable: true,
                     searchable: true
                 },
                 {
                     data: "kategori.kategori_nama",
-                    className: "",
+                    className: "text-center",
                     orderable: false,
                     searchable: false
                 },
                 {
                     data: "aksi",
-                    className: "",
+                    className: "text-center",
                     orderable: false,
                     searchable: false
                 }]

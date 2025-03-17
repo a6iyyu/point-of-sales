@@ -79,12 +79,18 @@ Route::prefix('supplier')->group(function () {
 });
 
 Route::prefix('barang')->group(function () {
-    Route::get('/', [Barang::class, 'index']);          // menampilkan halaman awal barang 
-    Route::post('/list', [Barang::class, 'list']);      // menampilkan data barang dalam bentuk json untuk datatables 
-    Route::get('/create', [Barang::class, 'create']);   // menampilkan halaman form tambah barang 
-    Route::post('/', [Barang::class, 'store']);         // menyimpan data barang baru 
-    Route::get('/{id}', [Barang::class, 'show']);       // menampilkan detail barang 
-    Route::get('/{id}/edit', [Barang::class, 'edit']);  // menampilkan halaman form edit barang 
-    Route::put('/{id}', [Barang::class, 'update']);     // menyimpan perubahan data barang 
-    Route::delete('/{id}', [Barang::class, 'destroy']); // menghapus data barang
+    Route::get('/', [Barang::class, 'index']);                              // menampilkan halaman awal barang 
+    Route::post('/list', [Barang::class, 'list']);                          // menampilkan data barang dalam bentuk json untuk datatables 
+    Route::get('/create', [Barang::class, 'create']);                       // menampilkan halaman form tambah barang 
+    Route::post('/', [Barang::class, 'store']);                             // menyimpan data barang baru 
+    Route::get('/create-ajax', [Barang::class, 'create_ajax']);             // Menampilkan halaman form tambah barang AJAX
+    Route::post('/ajax', [Barang::class, 'store_ajax']);                    // Menampilkan halaman form tambah barang AJAX
+    Route::get('/{id}', [Barang::class, 'show']);                           // menampilkan detail barang 
+    Route::get('/{id}/edit', [Barang::class, 'edit']);                      // menampilkan halaman form edit barang 
+    Route::put('/{id}', [Barang::class, 'update']);                         // menyimpan perubahan data barang 
+    Route::get('/{id}/edit-ajax', [Barang::class, 'edit_ajax']);            // Menampilkan halaman form edit barang AJAX
+    Route::put('/{id}/update-ajax', [Barang::class, 'update_ajax']);        // Menampilkan halaman form edit barang AJAX
+    Route::get('/{id}/delete-ajax', [Barang::class, 'confirm_ajax']);       // Untuk tampilkan form confirm delete barang AJAX
+    Route::delete('/{id}/delete-ajax', [Barang::class, 'delete_ajax']);     // Untuk hapus data barang AJAX
+    Route::delete('/{id}', [Barang::class, 'destroy']);                     // menghapus data barang
 });
