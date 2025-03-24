@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Level as LevelModel;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -115,7 +116,7 @@ class Level extends Controller
     {
         if (!LevelModel::find($id)) return redirect('/level')->with('error', 'Data level tidak ditemukan.');
         LevelModel::find($id)->delete();
-        return redirect('/level')->with('success', 'Data level berhasil dihapus.');        
+        return redirect('/level')->with('success', 'Data level berhasil dihapus.');     
     }
 
     public function create_ajax(): View
@@ -185,15 +186,15 @@ class Level extends Controller
 
     public function delete_ajax(Request $request, string $id): JsonResponse|Redirector|RedirectResponse
     {
-        if ($request->ajax() || $request->wantsJson()) {
-            if (LevelModel::find($id)) {
-                LevelModel::find($id)->delete();
-                return Response::json(['status' => true, 'message' => 'Data berhasil dihapus.']);
-            } else {
-                return Response::json(['status' => false, 'message' => 'Data tidak ditemukan.']);
-            }
+        if (!$request->ajax() && !$request->wantsJson()) return redirect('/level');
+        $user = LevelModel::find($id);
+        if (!$user) return Response::json(['status' => false, 'message' => 'Data tidak ditemukan.']);
+    
+        try {
+            $user->delete();
+            return Response::json(['status' => true, 'message' => 'Data berhasil dihapus.']);
+        } catch (QueryException $exception) {
+            return Response::json(['status' => false, 'message' => 'Data tidak bisa dihapus karena dipakai di tabel lain.']);
         }
-
-        return redirect('/level');
     }
 }
