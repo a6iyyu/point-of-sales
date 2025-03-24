@@ -8,10 +8,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthorizeUser
 {
-    public function handle(Request $request, Closure $next, $role = ''): Response
+    public function handle(Request $request, Closure $next, ... $roles): Response
     {
-        $user = $request->user();
-        if ($user->has_role($role)) return $next($request);
+        $role = $request->user()->get_role();
+        if (in_array($role, $roles)) return $next($request);
         abort(403, 'Maaf, Anda tidak punya akses ke halaman ini!');
     }
 }

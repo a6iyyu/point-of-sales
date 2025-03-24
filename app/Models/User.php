@@ -30,4 +30,9 @@ class User extends Authenticatable
     {
         return $this->level->level_kode == $role;
     }
+
+    public function get_role()
+    {
+        return $this->level->level_kode;
+    }
 }
