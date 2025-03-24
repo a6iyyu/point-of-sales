@@ -36,20 +36,22 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('level')->group(function () {
-        Route::get('/', [Level::class, 'index']);
-        Route::post('/list', [Level::class, 'list']);
-        Route::get('/create', [Level::class, 'create']);
-        Route::post('/', [Level::class, 'store']);
-        Route::get('/create-ajax', [Level::class, 'create_ajax']);
-        Route::post('/ajax', [Level::class, 'store_ajax']);
-        Route::get('/{id}', [Level::class, 'show']);
-        Route::get('/{id}/edit', [Level::class, 'edit']);
-        Route::put('/{id}', [Level::class, 'update']);
-        Route::get('/{id}/edit-ajax', [Level::class, 'edit_ajax']);
-        Route::put('/{id}/update-ajax', [Level::class, 'update_ajax']);
-        Route::get('/{id}/delete-ajax', [Level::class, 'confirm_ajax']);
-        Route::delete('/{id}/delete-ajax', [Level::class, 'delete_ajax']);
-        Route::delete('/{id}', [Level::class, 'destroy']);
+        Route::middleware(['authorize:ADM'])->group(function() {
+            Route::get('/', [Level::class, 'index']);
+            Route::post('/list', [Level::class, 'list']);
+            Route::get('/create', [Level::class, 'create']);
+            Route::post('/', [Level::class, 'store']);
+            Route::get('/create-ajax', [Level::class, 'create_ajax']);
+            Route::post('/ajax', [Level::class, 'store_ajax']);
+            Route::get('/{id}', [Level::class, 'show']);
+            Route::get('/{id}/edit', [Level::class, 'edit']);
+            Route::put('/{id}', [Level::class, 'update']);
+            Route::get('/{id}/edit-ajax', [Level::class, 'edit_ajax']);
+            Route::put('/{id}/update-ajax', [Level::class, 'update_ajax']);
+            Route::get('/{id}/delete-ajax', [Level::class, 'confirm_ajax']);
+            Route::delete('/{id}/delete-ajax', [Level::class, 'delete_ajax']);
+            Route::delete('/{id}', [Level::class, 'destroy']);
+        });
     });
 
     Route::prefix('kategori')->group(function () {

@@ -20,4 +20,14 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Level::class, 'level_id', 'level_id');
     }
+
+    public function rolename(): string
+    {
+        return $this->level->level_nama;
+    }
+
+    public function has_role($role): bool
+    {
+        return $this->level->level_kode == $role;
+    }
 }
