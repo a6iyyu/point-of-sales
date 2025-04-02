@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Barang as BarangModel;
 use App\Models\Kategori as KategoriModel;
+use App\Models\Level as LevelModel;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Yajra\DataTables\Facades\DataTables;
 
 class Barang extends Controller
@@ -31,7 +33,7 @@ class Barang extends Controller
     public function list(Request $request): JsonResponse
     {
         $barang = BarangModel::select('barang_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual', 'kategori_id')->with('kategori');
-        if ($request->kategori_id) $barang->where('kategori_id', $request->kategori_id);
+        if (!empty($request->input('filter_kategori'))) $barang->where('kategori_id', $request->input('filter_kategori'));
 
         return DataTables::of($barang)
             ->addIndexColumn()
@@ -137,7 +139,7 @@ class Barang extends Controller
 
     public function create_ajax(): View
     {
-        return view('barang.create-ajax', ['kategori' => KategoriModel::all()]);
+        return view('barang.create-ajax')->with('kategori', KategoriModel::select('kategori_id', 'kategori_nama')->get());
     }
 
     public function store_ajax(Request $request): JsonResponse|Redirector|RedirectResponse
@@ -159,22 +161,15 @@ class Barang extends Controller
                 ]);
             }
 
-            BarangModel::create([
-                'barang_kode' => $request->barang_kode,
-                'barang_nama' => $request->barang_nama,
-                'harga_beli' => $request->harga_beli,
-                'harga_jual' => $request->harga_jual,
-                'kategori_id' => $request->kategori_id
-            ]);
-
-            return Response::json(['status'  => true, 'message' => 'Data kategori berhasil disimpan']);
+            BarangModel::create($request->all());
+            return Response::json(['status'  => true, 'message' => 'Data barang berhasil disimpan']);
         }
         return redirect('/barang');
     }
 
     public function edit_ajax(string $id): View
     {
-        return view('barang.edit-ajax', ['barang' => BarangModel::find($id), 'kategori' => KategoriModel::all()]);
+        return view('barang.edit-ajax', ['barang' => BarangModel::find($id), 'level' => LevelModel::select('level_id', 'level_nama')->get()]);
     }
 
     public function update_ajax(Request $request, string $id): JsonResponse|Redirector|RedirectResponse
@@ -192,14 +187,7 @@ class Barang extends Controller
     
             $barang = BarangModel::find($id);
             if ($barang) {
-                $barang->update([
-                    'barang_kode' => $request->barang_kode,
-                    'barang_nama' => $request->barang_nama,
-                    'harga_beli' => $request->harga_beli,
-                    'harga_jual' => $request->harga_jual,
-                    'kategori_id' => $request->kategori_id
-                ]);
-    
+                $barang->update($request->all());
                 return Response::json(['status' => true, 'message' => 'Data berhasil diperbarui.']);
             } else {
                 return Response::json(['status' => false, 'message' => 'Data tidak ditemukan.']);
@@ -210,7 +198,7 @@ class Barang extends Controller
 
     public function confirm_ajax(string $id): View
     {
-        return view('barang.confirm-ajax', ['barang' => BarangModel::find($id), 'kategori' => KategoriModel::all()]);
+        return view('barang.confirm-ajax', ['barang' => BarangModel::find($id)]);
     }
 
     public function delete_ajax(Request $request, string $id): JsonResponse|Redirector|RedirectResponse
@@ -221,6 +209,49 @@ class Barang extends Controller
                 return Response::json(['status' => true, 'message' => 'Data berhasil dihapus.']);
             } else {
                 return Response::json(['status' => false, 'message' => 'Data tidak ditemukan.']);
+            }
+        }
+
+        return redirect('/barang');
+    }
+
+    public function import(): View
+    {
+        return view('barang.import');
+    }
+
+    public function import_ajax(Request $request): JsonResponse|Redirector|RedirectResponse
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $validator = Validator::make($request->all(), [
+                'file_barang' => ['required', 'mimes:xlsx', 'max:1024'],
+            ]);
+
+            if ($validator->fails()) return Response::json(['status' => false, 'message' => 'Validasi Gagal.', 'message_field' => $validator->errors()]);
+            
+            $reader = IOFactory::createReader('Xlsx');
+            $reader->setReadDataOnly(true);
+            $data = $reader->load($request->file('file_barang')->getRealPath())->getActiveSheet()->toArray(null, false, true, true);
+            $insert = [];
+
+            if (count($data) > 1) {
+                foreach ($data as $rows => $value) {
+                    if ($rows > 1) {
+                        $insert[] = [
+                            'kategori_id' => $value['A'],
+                            'barang_kode' => $value['B'],
+                            'barang_nama' => $value['C'],
+                            'harga_beli' => $value['D'],
+                            'harga_jual' => $value['E'],
+                            'created_at' => now(),
+                        ];
+                    }
+                }
+
+                if (count($insert) > 0) BarangModel::insertOrIgnore($insert);
+                return Response::json(['status' => true, 'message' => 'Data berhasil diimpor.']);
+            } else {
+                return Response::json(['status' => false, 'message' => 'Tidak ada data yang diimpor.']);
             }
         }
 
