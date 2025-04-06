@@ -8,8 +8,8 @@
             <button onclick="modal_action('{{ url('/barang/impor') }}')" class="btn btn-info">
                 Impor Barang
             </button>
-            <a href="{{ url('/barang/create') }}" class="btn btn-primary">
-                Tambah Data
+            <a href="{{ url('/barang/export-excel') }}" class="btn btn-primary">
+                <i class="fa fa-file-excel mr-2"></i> Ekspor Barang
             </a>
             <button onclick="modal_action('{{ url('/barang/create_ajax') }}')" class="btn btn-success">
                 Tambah Data (Ajax)

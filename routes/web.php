@@ -109,6 +109,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}/delete-ajax', [Barang::class, 'delete_ajax']);
         Route::get('/impor', [Barang::class, 'import']);
         Route::post('/impor-ajax', [Barang::class, 'import_ajax']);
+        Route::get('/export-excel', [Barang::class, 'export_excel']);
         Route::delete('/{id}', [Barang::class, 'destroy']);
     });
 });

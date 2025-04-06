@@ -12,7 +12,7 @@
                 <div class="form-group">
                     <label>Download Template</label>
                     <a href="{{ asset('template-barang.xlsx') }}" class="btn btn-info btn-sm" download>
-                        <i class="fa fa-file-excel"></i> Download
+                        <i class="fa fa-file-excel mr-2"></i> Download
                     </a>
                     <small id="error-kategori_id" class="error-text form-text text-danger"></small>
                 </div>
