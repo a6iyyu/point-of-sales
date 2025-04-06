@@ -8,6 +8,9 @@
             <button onclick="modal_action('{{ url('/barang/impor') }}')" class="btn btn-info">
                 Impor Barang
             </button>
+            <a href="{{ url('/barang/export-pdf') }}" class="btn btn-warning">
+                <i class="fa fa-file-pdf mr-2"></i> Ekspor Barang
+            </a>
             <a href="{{ url('/barang/export-excel') }}" class="btn btn-primary">
                 <i class="fa fa-file-excel mr-2"></i> Ekspor Barang
             </a>

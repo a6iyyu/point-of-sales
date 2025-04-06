@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Barang as BarangModel;
 use App\Models\Kategori as KategoriModel;
 use App\Models\Level as LevelModel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
@@ -308,5 +309,21 @@ class Barang extends Controller
 
         $writer->save('php://output');
         exit;
+    }
+
+    public function export_pdf(): HttpResponse
+    {
+        $barang = BarangModel::select('kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual')
+            ->orderBy('kategori_id')
+            ->orderBy('barang_kode')
+            ->with('kategori')
+            ->get();
+
+        $pdf = Pdf::loadView('barang.export-pdf', ['barang' => $barang]);
+        $pdf->setPaper('a4', 'portrait');
+        $pdf->setOption("isRemoteEnabled", true);
+        $pdf->render();
+
+        return $pdf->stream('Data Barang ' . date('Y-m-d H:i:s') . '.pdf');
     }
 }
