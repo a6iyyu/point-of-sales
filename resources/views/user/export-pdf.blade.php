@@ -67,43 +67,46 @@
                 <img src="{{ public_path('polinema.jpg') }}">
             </td>
             <td width="85%">
-                <span class="text-center d-block font-11 font-bold mb-1">KEMENTERIAN
-                    PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI</span>
-                <span class="text-center d-block font-13 font-bold mb-1">POLITEKNIK NEGERI
-                    MALANG</span>
-                <span class="text-center d-block font-10">Jl. Soekarno-Hatta No. 9 Malang
-                    65141</span>
-                <span class="text-center d-block font-10">Telepon (0341) 404424 Pes. 101-
-                    105, 0341-404420, Fax. (0341) 404420</span>
-                <span class="text-center d-block font-10">Laman: www.polinema.ac.id</span>
+                <span class="text-center d-block font-11 font-bold mb-1">
+                    KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI
+                </span>
+                <span class="text-center d-block font-13 font-bold mb-1">
+                    POLITEKNIK NEGERI MALANG
+                </span>
+                <span class="text-center d-block font-10">
+                    Jl. Soekarno-Hatta No. 9 Malang 65141
+                </span>
+                <span class="text-center d-block font-10">
+                    Telepon (0341) 404424 Pes. 101 105, 0341-404420, Fax. (0341) 404420
+                </span>
+                <span class="text-center d-block font-10">
+                    Laman: www.polinema.ac.id
+                </span>
             </td>
         </tr>
     </table>
-    <h3 class="text-center">LAPORAN DATA BARANG</h4>
-        <table class="border-all">
-            <thead>
-                <tr>
-                    <th class="text-center">No</th>
-                    <th>Kode Barang</th>
-                    <th>Nama Barang</th>
-                    <th class="text-right">Harga Beli</th>
-                    <th class="text-right">Harga Jual</th>
-                    <th>Kategori</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($barang as $b)
+
+    <h3 class="text-center">LAPORAN DATA KATEGORI</h3>
+    <table class="border-all">
+        <thead>
+            <tr>
+                <th class="text-center">No</th>
+                <th class="text-center">Username</th>
+                <th class="text-center">Nama</th>
+                <th class="text-center">Level ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($users as $user)
                 <tr>
                     <td class="text-center">{{ $loop->iteration }}</td>
-                    <td>{{ $b->barang_kode }}</td>
-                    <td>{{ $b->barang_nama }}</td>
-                    <td class="text-right">{{ number_format($b->harga_beli, 0, ',', '.') }}</td>
-                    <td class="text-right">{{ number_format($b->harga_jual, 0, ',', '.') }}</td>
-                    <td>{{ $b->kategori->kategori_nama }}</td>
+                    <td>{{ $user->username }}</td>
+                    <td>{{ $user->nama }}</td>
+                    <td>{{ $user->level->level_nama }}</td>
                 </tr>
-                @endforeach
-            </tbody>
-        </table>
+            @endforeach
+        </tbody>
+    </table>
 </body>
 
 </html>

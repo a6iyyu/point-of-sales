@@ -5,8 +5,16 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
-                <a class="btn btn-sm btn-primary mt-1" href="{{ url('/user/create') }}">Tambah</a>
-                <button onclick="modal_action('{{ url('/user/create-ajax') }}')" class="btn btn-sm btn-success mt-1">
+                <button onclick="modal_action('{{ url('/user/import') }}')" class="btn btn-sm btn-info mt-1">
+                    Impor Pengguna
+                </button>
+                <a href="{{ url('/user/export-excel') }}" class="btn btn-sm btn-primary mt-1">
+                    <i class="fa fa-file-excel mr-2"></i> Eskpor Pengguna
+                </a> 
+                <a href="{{ url('/user/export-pdf') }}" class="btn btn-sm btn-warning mt-1">
+                    <i class="fa fa-file-pdf mr-2"></i> Ekspor Pengguna
+                </a> 
+                <button onclick="modal_action('{{ url('user/create-ajax') }}')" class="btn btn-sm btn-success mt-1">
                     Tambah AJAX
                 </button>
             </div>

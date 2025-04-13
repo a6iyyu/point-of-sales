@@ -1,9 +1,9 @@
-<form action="{{ url('/barang/impor-ajax') }}" method="POST" id="form-import" enctype="multipart/form-data">
+<form action="{{ url('/level/import_ajax') }}" method="POST" id="form-import" enctype="multipart/form-data">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Impor Data Barang</h5>
+                <h5 class="modal-title">Import Data Level</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -11,51 +11,48 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Download Template</label>
-                    <a href="{{ asset('template-barang.xlsx') }}" class="btn btn-info btn-sm" download>
-                        <i class="fa fa-file-excel mr-2"></i> Download
+                    <a href="{{ asset('template-level.xlsx') }}" class="btn btn-info btn-sm" download>
+                        <i class="fa fa-file-excel"></i> Download
                     </a>
-                    <small id="error-kategori_id" class="error-text form-text text-danger"></small>
+                    <small id="error-kategori_id" class="error-text form-text text danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Pilih File</label>
-                    <input type="file" name="file_barang" id="file_barang" class="form-control" required>
-                    <small id="error-file_barang" class="error-text form-text text-danger"></small>
+                    <input type="file" name="file_level" id="file_level" class="form-control" required>
+                    <small id="error-file_level" class="error-text form-text text danger"></small>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
+                <button type="button" class="btn btn-warning" data-dismiss="modal">Batal</button>
                 <button type="submit" class="btn btn-primary">Unggah</button>
             </div>
         </div>
     </div>
 </form>
+
 <script>
     $(document).ready(() => {
         $("#form-import").validate({
             rules: {
-                file_barang: {
-                    required: true,
-                    extension: "xlsx"
-                }
+                file_level: { required: true, extension: "xlsx" },
             },
             submitHandler: (form) => {
-                var formData = new FormData(form);
                 $.ajax({
                     url: form.action,
                     type: form.method,
-                    data: formData,
+                    data: new FormData(form),
                     processData: false,
                     contentType: false,
                     success: (response) => {
                         if (response.status) {
                             $('#my-modal').modal('hide');
                             Swal.fire({ icon: 'success', title: 'Berhasil', text: response.message });
-                        } else {
+                        } else { 
                             $('.error-text').text('');
-                            $.each(response.message_field, (prefix, val) => $('#error-' + prefix).text(val[0]));
+                            $.each(response.msgField, (prefix, val) => $('#error-' + prefix).text(val[0]));
                             Swal.fire({ icon: 'error', title: 'Terjadi Kesalahan', text: response.message });
                         }
-                    }
+                    },
                 });
                 return false;
             },

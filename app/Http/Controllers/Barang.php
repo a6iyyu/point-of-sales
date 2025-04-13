@@ -261,7 +261,7 @@ class Barang extends Controller
         return redirect('/barang');
     }
 
-    public function export_excel()
+    public function export_excel(): never
     {
         $barang = BarangModel::select('kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual')
             ->orderBy('kategori_id')
@@ -281,20 +281,17 @@ class Barang extends Controller
         $number = 1;
         $rows = 2;
         foreach($barang as $key => $value) {
-            $sheet->setCellValue('A' . $rows, $number);
-            $sheet->setCellValue('B' . $rows, $value->barang_kode);
-            $sheet->setCellValue('C' . $rows, $value->barang_nama);
-            $sheet->setCellValue('D' . $rows, $value->harga_beli);
-            $sheet->setCellValue('E' . $rows, $value->harga_jual);
-            $sheet->setCellValue('F' . $rows, $value->kategori->kategori_nama);
+            $sheet->setCellValue("A{$rows}" . $rows, $number);
+            $sheet->setCellValue("B{$rows}", $value->barang_kode);
+            $sheet->setCellValue("C{$rows}", $value->barang_nama);
+            $sheet->setCellValue("D{$rows}", $value->harga_beli);
+            $sheet->setCellValue("E{$rows}", $value->harga_jual);
+            $sheet->setCellValue("F{$rows}", $value->kategori->kategori_nama);
             $rows++;
             $number++;
         };
 
-        foreach(range('A', 'F') as $column) {
-            $sheet->getColumnDimension($column)->setAutoSize(true);
-        }
-
+        foreach(range('A', 'F') as $column) $sheet->getColumnDimension($column)->setAutoSize(true);
         $sheet->setTitle('Data Barang');
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
 
