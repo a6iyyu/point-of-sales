@@ -49,7 +49,7 @@
                             Swal.fire({ icon: 'success', title: 'Berhasil', text: response.message });
                         } else {
                             $('.error-text').text('');
-                            $.each(response.msgField, (prefix, val) => $('#error-' + prefix).text(val[0]));
+                            $.each(response.message_field, (prefix, val) => $('#error-' + prefix).text(val[0]));
                             Swal.fire({ icon: 'error', title: 'Terjadi Kesalahan', text: response.message });
                         }
                     },

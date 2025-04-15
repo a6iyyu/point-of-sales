@@ -20,6 +20,8 @@ Route::post('register', [Auth::class, 'postregister']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [Welcome::class, 'index']);
+    Route::get('/profile', [Welcome::class, 'profile']);
+    Route::post('/profile/upload-photo', [Welcome::class, 'upload_photo'])->name('profile.upload');
 
     Route::prefix('user')->group(function () {
         Route::middleware(['authorize:ADM'])->group(function () {

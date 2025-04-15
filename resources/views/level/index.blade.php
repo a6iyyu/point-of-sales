@@ -56,8 +56,10 @@
 @push('js')
     <script>
         const modal_action = (url = '') => $('#my-modal').load(url, () => $('#my-modal').modal('show'));
+        var data_level;
+
         $(document).ready(() => {
-            let data_level = $('#table_level').DataTable({
+            data_level = $('#table_level').DataTable({
                 serverSide: true,
                 ajax: {
                     "url": "{{ url('level/list') }}",

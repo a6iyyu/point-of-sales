@@ -1,4 +1,4 @@
-<form action="{{ url('/level/import_ajax') }}" method="POST" id="form-import" enctype="multipart/form-data">
+<form action="{{ url('/level/import-ajax') }}" method="POST" id="form-import" enctype="multipart/form-data">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -47,9 +47,10 @@
                         if (response.status) {
                             $('#my-modal').modal('hide');
                             Swal.fire({ icon: 'success', title: 'Berhasil', text: response.message });
+                            data_level.ajax.reload();
                         } else { 
                             $('.error-text').text('');
-                            $.each(response.msgField, (prefix, val) => $('#error-' + prefix).text(val[0]));
+                            $.each(response.message_field, (prefix, val) => $('#error-' + prefix).text(val[0]));
                             Swal.fire({ icon: 'error', title: 'Terjadi Kesalahan', text: response.message });
                         }
                     },

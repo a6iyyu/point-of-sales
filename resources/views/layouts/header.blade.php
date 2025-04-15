@@ -11,6 +11,42 @@
         </li>
     </ul>
     <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown user user-menu">
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                <img src="{{ asset(Auth::user()->foto_profil ? 'storage/profile-photo/profile-' . Auth::user()->user_id . '.jpg' : 'adminlte/dist/img/user2-160x160.jpg') }}" class="user-image img-circle elevation-2" alt="User Image">
+                <span class="hidden-xs">Alexander Pierce</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                <li class="user-header bg-primary">
+                    <img src="{{ asset(Auth::user()->foto_profil ? 'storage/profile-photo/profile-' . Auth::user()->user_id . '.jpg' : 'adminlte/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+                    <p>
+                        Alexander Pierce - Web Developer
+                        <small>Member since Nov. 2012</small>
+                    </p>
+                </li>
+                <li class="user-body">
+                    <div class="row">
+                        <div class="col-4 text-center">
+                            <a href="#">Followers</a>
+                        </div>
+                        <div class="col-4 text-center">
+                            <a href="#">Sales</a>
+                        </div>
+                        <div class="col-4 text-center">
+                            <a href="#">Friends</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="user-footer">
+                    <div class="pull-left">
+                        <a href="{{ url('/profile') }}" class="btn btn-default btn-flat">Profile</a>
+                    </div>
+                    <div class="pull-right mt-2">
+                        <a href="{{ url('/logout') }}" class="btn btn-default btn-flat">Sign out</a>
+                    </div>
+                </li>
+            </ul>
+        </li>
         <li class="nav-item">
             <a class="nav-link" data-widget="navbar-search" href="#" role="button">
                 <i class="fas fa-search"></i>
@@ -18,12 +54,8 @@
             <div class="navbar-search-block">
                 <form class="form-inline">
                     <div class="input-group input-group-sm">
-                        <input
-                            class="form-control form-control-navbar"
-                            type="search"
-                            placeholder="Search"
-                            aria-label="Search"
-                        />
+                        <input class="form-control form-control-navbar" type="search" placeholder="Search"
+                            aria-label="Search" />
                         <div class="input-group-append">
                             <button class="btn btn-navbar" type="submit">
                                 <i class="fas fa-search"></i>
@@ -44,8 +76,7 @@
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <a href="#" class="dropdown-item">
                     <div class="media">
-                        <img src="../../dist/img/user1-128x128.jpg" alt="User Avatar"
-                            class="img-size-50 mr-3 img-circle">
+                        <img src="{{ asset('adminlte/dist/img/user1-128x128.jpg') }}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
                         <div class="media-body">
                             <h3 class="dropdown-item-title">
                                 Brad Diesel
@@ -59,11 +90,7 @@
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item">
                     <div class="media">
-                        <img
-                            src="../../dist/img/user8-128x128.jpg"
-                            alt="User Avatar"
-                            class="img-size-50 img-circle mr-3"
-                        />
+                        <img src="{{ asset('adminlte/dist/img/user8-128x128.jpg') }}" alt="User Avatar" class="img-size-50 img-circle mr-3" />
                         <div class="media-body">
                             <h3 class="dropdown-item-title">
                                 John Pierce
@@ -77,11 +104,7 @@
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item">
                     <div class="media">
-                        <img
-                            src="../../dist/img/user3-128x128.jpg"
-                            alt="User Avatar"
-                            class="img-size-50 img-circle mr-3"
-                        />
+                        <img src="{{ asset('adminlte/dist/img/user3-128x128.jpg') }}" alt="User Avatar" class="img-size-50 img-circle mr-3" />
                         <div class="media-body">
                             <h3 class="dropdown-item-title">
                                 Nora Silvester
