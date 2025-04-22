@@ -41,9 +41,9 @@ class Barang extends Controller
         return DataTables::of($barang)
             ->addIndexColumn()
             ->addColumn('aksi', function ($barang) {
-                $btn = '<button onclick="modal_action(\''.url('/barang/' . $barang->barang_id . '/show-ajax').'\')" class="btn btn-info btn-sm">Detail</button> ';
-                $btn .= '<button onclick="modal_action(\''.url('/barang/' . $barang->barang_id . '/edit-ajax').'\')" class="btn btn-warning btn-sm">Edit</button> ';
-                $btn .=  '<button onclick="modal_action(\''.url('/barang/' . $barang->barang_id . '/delete-ajax').'\')" class="btn btn-danger btn-sm">Hapus</button> ';
+                $btn = '<button onclick="modal_action(\''.url("/barang/$barang->barang_id/show-ajax").'\')" class="btn btn-info btn-sm">Detail</button> ';
+                $btn .= '<button onclick="modal_action(\''.url("/barang/$barang->barang_id/edit-ajax").'\')" class="btn btn-warning btn-sm">Edit</button> ';
+                $btn .=  '<button onclick="modal_action(\''.url("/barang/$barang->barang_id/delete-ajax").'\')" class="btn btn-danger btn-sm">Hapus</button> ';
                 return $btn;
             })
             ->rawColumns(['aksi'])

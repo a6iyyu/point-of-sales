@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth;
 use App\Http\Controllers\Barang;
 use App\Http\Controllers\Kategori;
 use App\Http\Controllers\Level;
+use App\Http\Controllers\Penjualan;
+use App\Http\Controllers\Stok;
 use App\Http\Controllers\Supplier;
 use App\Http\Controllers\User;
 use App\Http\Controllers\Welcome;
@@ -128,5 +130,30 @@ Route::middleware('auth')->group(function () {
         Route::get('/export-excel', [Barang::class, 'export_excel']);
         Route::get('/export-pdf', [Barang::class, 'export_pdf']);
         Route::delete('/{id}', [Barang::class, 'destroy']);
+    });
+
+    Route::middleware(['authorize:ADM,MNG,STF'])->prefix('stok')->group(function () {
+        Route::get('/', [Stok::class, 'index']);
+        Route::post('/list', [Stok::class, 'list']);
+        Route::get('/create-ajax', [Stok::class, 'create_ajax']);
+        Route::post('/store-ajax', [Stok::class, 'store_ajax']);
+        Route::get('/{id}/delete-ajax', [Stok::class, 'confirm_ajax']);
+        Route::delete('/{id}/delete-ajax', [Stok::class, 'delete_ajax']);
+        Route::get('/import', [Stok::class, 'import']);
+        Route::post('/import-ajax', [Stok::class, 'import_ajax']);
+        Route::get('export-excel', [Stok::class, 'export_excel']);
+        Route::get('export-pdf', [Stok::class, 'export_pdf']);
+    });
+
+    Route::middleware(['authorize:ADM,MNG,STF'])->prefix('penjualan')->group(function () {
+        Route::get('/', [Penjualan::class, 'index']);
+        Route::post('/list', [Penjualan::class, 'list']);
+        Route::get('/create-ajax', [Penjualan::class, 'create_ajax']);
+        Route::post('/store-ajax', [Penjualan::class, 'store_ajax']);
+        Route::get('/{id}/show-ajax', [Penjualan::class, 'show_ajax']);
+        Route::get('/{id}/delete-ajax', [Penjualan::class, 'confirm_ajax']);
+        Route::delete('/{id}/delete-ajax', [Penjualan::class, 'delete_ajax']);
+        Route::get('export-excel', [Penjualan::class, 'export_excel']);
+        Route::get('export-pdf', [Penjualan::class, 'export_pdf']);
     });
 });

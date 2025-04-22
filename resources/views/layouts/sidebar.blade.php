@@ -21,7 +21,7 @@
             </li>
             <li class="nav-item">
                 <a href="{{ url('/profile') }}" class="nav-link {{ $active_menu == 'profile' ? 'active' : '' }} ">
-                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <i class="nav-icon fas fa-user"></i>
                     <p>Profil</p>
                 </a>
             </li>
@@ -34,7 +34,7 @@
             </li>
             <li class="nav-item">
                 <a href="{{ url('/user') }}" class="nav-link {{ $active_menu == 'user' ? 'active' : '' }}">
-                    <i class="nav-icon far fa-user"></i>
+                    <i class="nav-icon fas fa-users"></i>
                     <p>Data User</p>
                 </a>
             </li>
@@ -65,7 +65,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ url('/barang') }}" class="nav-link {{ $active_menu == 'penjualan' ? 'active' : '' }} ">
+                <a href="{{ url('/penjualan') }}" class="nav-link {{ $active_menu == 'penjualan' ? 'active' : '' }} ">
                     <i class="nav-icon fas fa-cash-register"></i>
                     <p>Transaksi Penjualan</p>
                 </a>
