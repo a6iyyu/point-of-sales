@@ -12,7 +12,7 @@ return [
         ],
         'api' => [
             'driver' => 'jwt',
-            'proveder' => 'users',
+            'provider' => 'users',
         ],
     ],
     'providers' => [
