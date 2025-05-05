@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -24,13 +25,18 @@ class User extends Authenticable implements JWTSubject
 
     protected $table = 'm_user';
     protected $primaryKey = 'user_id';
-    protected $fillable = ['username', 'password', 'nama', 'level_id', 'created_at', 'updated_at'];
+    protected $fillable = ['username', 'nama', 'password', 'level_id', 'image'];
     protected $hidden = ['password'];
     protected $casts = ['password' => 'hashed'];
 
     public function level(): BelongsTo
     {
         return $this->belongsTo(Level::class, 'level_id', 'level_id');
+    }
+
+    public function image(): Attribute
+    {
+        return Attribute::make(fn($image) => asset("storage/posts/$image"));
     }
 
     public function stok(): HasMany

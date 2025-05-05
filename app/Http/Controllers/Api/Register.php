@@ -18,15 +18,20 @@ class Register extends Controller
             'nama'     => 'required',
             'password' => 'required|min:5|confirmed',
             'level_id' => 'required',
+            'image'    => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         if ($validator->fails()) return Response::json($validator->errors(), 422);
+
+        $image = $request->file('image');
+        $image->storeAs('public/posts', $image->hashName());
 
         $user = User::create([
             'username'  => $request->username,
             'nama'      => $request->nama,
             'password'  => bcrypt($request->password),
-            'level_id'  => $request->level_id
+            'level_id'  => $request->level_id,
+            'image'     => $image->hashName(),
         ]);
 
         if ($user) return Response::json(['success' => true, 'user' => $user], 200);
