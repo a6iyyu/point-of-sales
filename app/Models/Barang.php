@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Barang extends Model
 {
@@ -19,14 +21,15 @@ class Barang extends Model
         'barang_nama',
         'harga_beli',
         'harga_jual',
+        'gambar',
     ];
 
-    public function kategori()
+    public function kategori(): BelongsTo
     {
         return $this->belongsTo(Kategori::class, 'kategori_id', 'kategori_id');
     }
 
-    public function stok()
+    public function stok(): HasMany
     {
         return $this->hasMany(Stok::class, 'barang_id', 'barang_id');
     }
